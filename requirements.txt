@@ -1,11 +1,11 @@
 tortoise-orm[asyncpg]
-fastapi
-python-multipart
-pydantic
+aiohttp==3.10.10
+fastapi==0.112.4
+passlib==1.7.4
+pydantic==2.9.2
+PyJWT==2.9.0
+python-multipart==0.0.17
+selenium==4.26.1
 uvicorn
-passlib
-pyjwt
-selenium
-aiohttp
 
 git+https://github.com/HexChap/MSCore#egg=ms_core
