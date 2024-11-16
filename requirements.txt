@@ -2,5 +2,8 @@ tortoise-orm[asyncpg]
 fastapi
 pydantic
 uvicorn
+cryptography
+selenium
+aiohttp
 
 git+https://github.com/HexChap/MSCore#egg=ms_core
