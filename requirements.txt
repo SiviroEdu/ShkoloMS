@@ -1,8 +1,10 @@
 tortoise-orm[asyncpg]
 fastapi
+python-multipart
 pydantic
 uvicorn
-cryptography
+passlib
+pyjwt
 selenium
 aiohttp
 

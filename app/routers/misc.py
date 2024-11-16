@@ -1,19 +1,23 @@
-from fastapi import APIRouter, HTTPException, status
+from typing import Annotated
 
-from app.settings import driver
-from app.shkolo_wrap import save_cookie_enc, get_cookie_enc, login_shkolo, get_grades
+from fastapi import APIRouter, HTTPException, status, Depends
+
+from app import UserSchema
+from app.routers.auth import get_current_user
+from app.shkolo_wrap import login_shkolo
 
 router = APIRouter(prefix="/misc")
 
-
-@router.get("/enc")
-async def misc():
-    return await save_cookie_enc("hi", "test", 2400253553, expiry=123124124)
-
-
-@router.get("/dec")
-async def misc():
-    return await get_cookie_enc("hi", 2400253553)
+#
+# @router.get("/enc", tags=["dev"])
+# async def misc():
+#     return await save_cookie_enc("hi", "test", 2400253553, expiry=123124124)
+#
+#
+# @router.get("/dec", tags=["dev"])
+# async def misc():
+#     return await get_cookie_enc("hi", 2400253553)
+#
 
 
 @router.get("/login")
@@ -29,6 +33,6 @@ async def misc():
 
     return cookie
 
-@router.get("/grade")
-async def misc():
-    return await get_grades(2400253553)
+# @router.get("/grade", tags=["dev"])
+# async def misc():
+#     return await get_grades(2400253553)

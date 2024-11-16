@@ -1,5 +1,6 @@
 from tortoise import Tortoise
 from tortoise.contrib.pydantic import pydantic_model_creator
+from pydantic import BaseModel, ConfigDict
 
 from app import LoginCookie, Pupil
 from app.models import Feedback, Grade, Course
@@ -47,3 +48,26 @@ CourseCreate = pydantic_model_creator(
     name="CourseCreate",
     exclude_readonly=True,
 )
+
+
+class UserSchema(BaseModel):
+    id: int
+    shkolo_username: str
+    pupil_id: int
+    coins: int
+    bulbs: int
+
+
+class UserCreate(BaseModel):
+    shkolo_username: str
+    pupil_id: int
+    coins: int = None
+    bulbs: int = None
+
+
+class TokenData(BaseModel):
+    model_config = ConfigDict(extra="allow")
+    username: str
+    shkolo_token_id: str
+    shkolo_token: str
+    exp: int

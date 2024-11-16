@@ -15,6 +15,7 @@ async def lifespan(app: FastAPI):
 
     # Quit browser
     settings.driver.quit()
+    await settings.session.close()
 
 application = FastAPI(
     title="ShkoloMS",
