@@ -5,7 +5,7 @@ passlib==1.7.4
 pydantic==2.9.2
 PyJWT==2.9.0
 python-multipart==0.0.17
-selenium==4.26.1
+seleniumbase==4.32.11
 uvicorn
 
 git+https://github.com/HexChap/MSCore#egg=ms_core
