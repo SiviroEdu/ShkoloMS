@@ -1,38 +1,22 @@
-import time
 from datetime import datetime, timedelta
 from typing import Annotated
 
-import jwt
-import pydantic
 from fastapi import Depends, APIRouter, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from app import UserSchema, UserCreate, TokenData
+from app import UserSchema
+from app.auth import decrypt_token, create_access_token
 from app.bridges.users import UsersBridge
-from app.settings import session, SECRET_KEY, ALGORITHM
 from app.shkolo_wrap import update_user_data
 
-router = APIRouter()
+router = APIRouter(prefix="/auth")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)]
 ) -> UserSchema | None:
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        try:
-            token_data = TokenData(**payload)
-        except pydantic.ValidationError as e:
-            raise credentials_exception
-    except jwt.InvalidTokenError:
-        raise credentials_exception
-
+    token_data = await decrypt_token(token)
     # async with session.get(
     #     f"https://app.shkolo.bg/ajax/diary/getAbsencesForPupil",
     #     cookies={
@@ -44,16 +28,17 @@ async def get_current_user(
 
     user = await UsersBridge.get_by_username(token_data.username)
 
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
     return user
 
-def create_access_token(data: dict, expires_timestamp: int):
-    to_encode = data.copy()
 
-    expire = datetime.fromtimestamp(expires_timestamp)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-
-    return encoded_jwt
+router.add_api_route("/get-current-user", get_current_user)
 
 
 @router.post("/token")
