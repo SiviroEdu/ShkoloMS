@@ -2,7 +2,7 @@ from tortoise import Tortoise
 from tortoise.contrib.pydantic import pydantic_model_creator
 from pydantic import BaseModel, ConfigDict
 
-from app import LoginCookie, Pupil
+from app import Pupil
 from app.models import Feedback, Grade, Course
 
 Tortoise.init_models(
@@ -16,12 +16,12 @@ FeedbackCreate = pydantic_model_creator(
     exclude_readonly=True,
 )
 
-LoginCookieSchema = pydantic_model_creator(LoginCookie, name="LoginCookieSchema")
-LoginCookieCreate = pydantic_model_creator(
-    LoginCookie,
-    name="LoginCookieCreate",
-    exclude_readonly=True,
-)
+# LoginCookieSchema = pydantic_model_creator(LoginCookie, name="LoginCookieSchema")
+# LoginCookieCreate = pydantic_model_creator(
+#     LoginCookie,
+#     name="LoginCookieCreate",
+#     exclude_readonly=True,
+# )
 
 PupilSchema = pydantic_model_creator(Pupil, name="PupilSchema")
 class PupilCreate(pydantic_model_creator(
@@ -59,7 +59,8 @@ class UserSchema(BaseModel):
 
 
 class UserCreate(BaseModel):
-    shkolo_username: str
+    shkolo_username: str = None
+    shkolo_name: str = None
     pupil_id: int
     coins: int = None
     bulbs: int = None
@@ -68,6 +69,6 @@ class UserCreate(BaseModel):
 class TokenData(BaseModel):
     model_config = ConfigDict(extra="allow")
     username: str
-    shkolo_token_id: str
-    shkolo_token: str
+    # shkolo_token_id: str
+    # shkolo_token: str
     exp: int

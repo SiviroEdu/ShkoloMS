@@ -6,6 +6,7 @@ pydantic==2.9.2
 PyJWT==2.9.0
 python-multipart==0.0.17
 seleniumbase==4.32.11
+aiofiles
 uvicorn
 
 git+https://github.com/HexChap/MSCore#egg=ms_core

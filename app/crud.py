@@ -1,8 +1,8 @@
 from ms_core import BaseCRUD
 
-from app import LoginCookie, Pupil
+from app import Pupil
 from app.models import Feedback, Grade, Course
-from app.schemas import FeedbackSchema, LoginCookieSchema, GradeSchema, CourseSchema, LoginCookieCreate, PupilSchema
+from app.schemas import FeedbackSchema, GradeSchema, CourseSchema, PupilSchema
 from app.settings import pwd_context
 
 

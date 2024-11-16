@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import aiohttp
 from passlib.context import CryptContext
@@ -10,8 +11,8 @@ ALGORITHM = "HS256"
 db_url = os.environ["DB_URL"]
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
+source_path = Path("app") / "sources"
 # create a Driver instance with undetected_chromedriver (uc) and headless mode
-driver = Driver(headless=True)
+# driver = Driver(headless=True)
 
 session = aiohttp.ClientSession()

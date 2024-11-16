@@ -20,6 +20,7 @@ class UsersBridge:
     @staticmethod
     async def _fetch_user(url) -> UserSchema:
         async with session.get(url) as resp:
+            print(await resp.read())
             data = await resp.json()
 
             return UserSchema(**data) if data else None

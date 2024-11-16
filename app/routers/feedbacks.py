@@ -1,14 +1,17 @@
-from fastapi import Depends
-from ms_core import BaseCRUDRouter
-
-from app import FeedbackCRUD, FeedbackCreate, FeedbackSchema
-from app.routers.auth import get_current_user
-
-router = BaseCRUDRouter[FeedbackSchema, FeedbackCreate](
-    crud=FeedbackCRUD,
-    schema=FeedbackSchema,
-    schema_create=FeedbackCreate,
+# from typing import Annotated
+#
+from fastapi import Depends, APIRouter
+#
+# from app import UserSchema, Feedback
+# from app.routers.auth import get_current_user
+#
+router = APIRouter(
     prefix="/feedbacks",
     tags=["feedbacks"],
-    dependencies=[Depends(get_current_user)]
 )
+#
+# @router.get("/@me")
+# async def get_feedbacks(user: Annotated[UserSchema, Depends(get_current_user)]):
+#     feedbacks =  await Feedback.filter(pupil_id=user.pupil_id)
+#
+#     return feedbacks

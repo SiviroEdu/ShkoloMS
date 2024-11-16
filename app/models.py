@@ -1,9 +1,16 @@
+import enum
+
 from ms_core import AbstractModel
 from tortoise import fields
+
+class FeedbackEnum(enum.StrEnum):
+    REMARKS = enum.auto()
+    PRAISES = enum.auto()
 
 
 class YearClass(AbstractModel):
     id = fields.BigIntField(pk=True, generated=False)
+    name = fields.CharField(64)
 
     pupils: fields.ReverseRelation["Pupil"]
     courses: fields.ReverseRelation["Course"]
@@ -19,6 +26,7 @@ class Course(AbstractModel):
     year_class: fields.ForeignKeyRelation[YearClass] = fields.ForeignKeyField(
         "models.YearClass", "courses"
     )
+    feedbacks: fields.ReverseRelation["Feedback"]
 
     class Meta:
         table = "courses"
@@ -29,9 +37,9 @@ class Pupil(AbstractModel):
     # user_id = fields.IntField(unique=True)
 
     year_class: fields.ForeignKeyRelation[YearClass] = fields.ForeignKeyField(
-        "models.YearClass", "pupils", null=True
+        "models.YearClass", "pupils"
     )
-    login_cookie: fields.ReverseRelation["LoginCookie"]
+    # login_cookie: fields.ReverseRelation["LoginCookie"]
     grades: fields.ReverseRelation["Grade"]
     feedbacks: fields.ReverseRelation["Feedback"]
 
@@ -40,7 +48,8 @@ class Pupil(AbstractModel):
 
 
 class Feedback(AbstractModel):
-    name = fields.CharField(64, null=True)
+    amount = fields.IntField()
+    type = fields.CharEnumField(FeedbackEnum)
 
     course: fields.ForeignKeyRelation[Course] = fields.ForeignKeyField(
         "models.Course", "feedbacks"
@@ -50,6 +59,7 @@ class Feedback(AbstractModel):
     )
 
     class Meta:
+        unique_together = (("course_id", "pupil_id", "type"),)
         table = "feedbacks"
 
 
@@ -68,14 +78,14 @@ class Grade(AbstractModel):
         table = "grades"
 
 
-class LoginCookie(AbstractModel):
-    name = fields.CharField(256)
-    value = fields.TextField()
-    expiry = fields.BigIntField(null=True)
-
-    pupil: fields.OneToOneRelation[Pupil] = fields.OneToOneField(
-        "models.Pupil", "login_cookie"
-    )
-
-    class Meta:
-        table = "login_cookies"
+# class LoginCookie(AbstractModel):
+#     name = fields.CharField(256)
+#     value = fields.TextField()
+#     expiry = fields.BigIntField(null=True)
+#
+#     pupil: fields.OneToOneRelation[Pupil] = fields.OneToOneField(
+#         "models.Pupil", "login_cookie"
+#     )
+#
+#     class Meta:
+#         table = "login_cookies"

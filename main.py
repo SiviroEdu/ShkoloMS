@@ -14,7 +14,7 @@ async def lifespan(app: FastAPI):
     yield
 
     # Quit browser
-    settings.driver.quit()
+    # settings.driver.quit()
     await settings.session.close()
 
 application = FastAPI(
