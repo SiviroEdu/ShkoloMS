@@ -10,7 +10,7 @@ from app.bridges.users import UsersBridge
 from app.shkolo_wrap import update_user_data
 
 router = APIRouter(prefix="/auth")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 
 async def get_current_user(
