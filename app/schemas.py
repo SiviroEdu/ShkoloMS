@@ -57,6 +57,7 @@ class UserSchema(BaseModel):
     pupil_id: int
     coins: int
     bulbs: int
+    type: int
 
 
 class UserCreate(BaseModel):
@@ -65,11 +66,13 @@ class UserCreate(BaseModel):
     pupil_id: int
     coins: int = None
     bulbs: int = None
+    type: int
 
 
 class TokenData(BaseModel):
     model_config = ConfigDict(extra="allow")
     username: str
+    type: int
     # shkolo_token_id: str
     # shkolo_token: str
     exp: int

@@ -37,9 +37,8 @@ async def process_class_user_name(
     _, pupil_existed = await PupilCRUD.get_or_create(
         year_class_id=class_id, id=pupil_id
     )
-    if not (user := await UsersBridge.get_by_username(username)):
-        user = await UsersBridge.create(UserCreate(
-            pupil_id=pupil_id, shkolo_name=user_name, shkolo_username=username
-        ))
+    user = await UsersBridge.create(UserCreate(
+        pupil_id=pupil_id, shkolo_name=user_name, shkolo_username=username
+    ))
 
     return user

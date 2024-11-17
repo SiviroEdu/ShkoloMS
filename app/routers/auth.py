@@ -5,7 +5,7 @@ from fastapi import Depends, APIRouter, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from app import UserSchema
-from app.auth import decrypt_token, create_access_token
+from app.auth import decrypt_token, create_access_token, credentials_exception
 from app.bridges.users import UsersBridge
 from app.shkolo_wrap import update_user_data
 
@@ -15,7 +15,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)]
-) -> UserSchema | None:
+) -> UserSchema:
     token_data = await decrypt_token(token)
     # async with session.get(
     #     f"https://app.shkolo.bg/ajax/diary/getAbsencesForPupil",
@@ -29,16 +29,25 @@ async def get_current_user(
     user = await UsersBridge.get_by_username(token_data.username)
 
     if not user:
+        raise credentials_exception
+
+    return user
+
+
+async def get_current_admin(
+    user: Annotated[UserSchema, Depends(get_current_user)]
+) -> UserSchema:
+    if user.type != 1:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access Denied"
         )
 
     return user
 
 
 router.add_api_route("/get-current-user", get_current_user)
+router.add_api_route("/get-current-admin", get_current_admin)
 
 
 @router.post("/token")
@@ -55,13 +64,14 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
 
     # cookie, pupil_id = result
 
-    await update_user_data(form_data.username, True, True)
+    user = await update_user_data(form_data.username, True, True)
 
     access_token = create_access_token(
         data={
             # "shkolo_token_id": cookie.get("name").split("_")[-1],
             # "shkolo_token": cookie.get("value"),
-            "username": form_data.username
+            "username": form_data.username,
+            "type": user.type
         },
         expires_timestamp=int(
             (datetime.now() + timedelta(days=365)

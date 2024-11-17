@@ -29,11 +29,13 @@ async def update_user_data(
 ):
     pupil_id = await get_pupil_id()
 
-    if not await UsersBridge.get_by_username(username):
-        await process_class_user_name(pupil_id, username)
+    if not (user := await UsersBridge.get_by_username(username)):
+        user = await process_class_user_name(pupil_id, username)
 
     if grades:
         await update_grades(pupil_id)
 
     if feedbacks:
         await update_feedbacks(pupil_id)
+
+    return user
