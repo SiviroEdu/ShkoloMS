@@ -55,6 +55,7 @@ CourseCreate = pydantic_model_creator(
 class UserSchema(BaseModel):
     id: int
     shkolo_username: str | None
+    display_username: str | None
     shkolo_name: str | None
     pupil_id: int
     coins: int
@@ -66,6 +67,7 @@ class UserSchema(BaseModel):
 
 class UserCreate(BaseModel):
     shkolo_username: str = None
+    display_username: str = None
     shkolo_name: str = None
     pupil_id: int
     coins: int = None
