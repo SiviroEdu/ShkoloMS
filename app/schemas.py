@@ -69,7 +69,7 @@ class UserCreate(BaseModel):
     pupil_id: int
     coins: int = None
     bulbs: int = None
-    type: int
+    type: int = 0
 
 
 class TokenData(BaseModel):
