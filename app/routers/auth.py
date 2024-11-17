@@ -72,7 +72,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
             # "shkolo_token_id": cookie.get("name").split("_")[-1],
             # "shkolo_token": cookie.get("value"),
             "username": form_data.username,
-            "type": user.type
+            "type": user.get("type", 0) if isinstance(user, dict) else user.type
         },
         expires_timestamp=int(
             (datetime.now() + timedelta(days=365)
