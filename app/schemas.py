@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from tortoise import Tortoise
 from tortoise.contrib.pydantic import pydantic_model_creator
 from pydantic import BaseModel, ConfigDict
@@ -58,6 +60,7 @@ class UserSchema(BaseModel):
     coins: int
     bulbs: int
     type: int
+    created_at: datetime
 
 
 class UserCreate(BaseModel):
