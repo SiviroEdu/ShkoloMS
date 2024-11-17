@@ -65,7 +65,8 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     # cookie, pupil_id = result
 
     user = await update_user_data(form_data.username, True, True)
-
+    print(type(user))
+    print(user)
     access_token = create_access_token(
         data={
             # "shkolo_token_id": cookie.get("name").split("_")[-1],
