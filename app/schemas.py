@@ -60,6 +60,7 @@ class UserSchema(BaseModel):
     coins: int
     bulbs: int
     type: int
+    level: int
     created_at: datetime
 
 
